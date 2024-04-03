@@ -5,22 +5,29 @@ import './index.css'
 import NextPage from './router/NextPage.jsx'
 import Cadastro from './router/Cadastro.jsx'
 import { ChakraProvider } from '@chakra-ui/react'
+import Home from './router/Home.jsx';
 
 import {createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 
-const router =createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path:"next",
-    element: <NextPage />,
-  },
-  {
-    path:"register",
-    element: <Cadastro/>,
-  },  
+    children: [
+      {
+        path:"next",
+        element: <NextPage />,
+      },
+      {
+        path:"register",
+        element: <Cadastro/>,
+      }, 
+      {
+        path:"home",
+        element: <Home/>,
+      },   
+    ]
+  }, 
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(  
