@@ -7,7 +7,7 @@ import {Flex, Box, VStack, StackDivider} from '@chakra-ui/react';
 
 const NextPage = () => {
   return (
-    <Flex align='center' justify='center' minHeight='90vh' gap='100px' >
+    <Flex direction='column' align='center' justify='center' minHeight='80vh' gap='100px' >
         <Box h='40px' fontSize='40px' _hover = {{
           color: 'orange.700',
           transition: '.8s',

@@ -6,6 +6,7 @@ import NextPage from './router/NextPage.jsx'
 import Cadastro from './router/Cadastro.jsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import Home from './router/Home.jsx';
+import Login from './router/Login.jsx'
 
 import {createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path:"next",
+        path:"contacts",
         element: <NextPage />,
       },
       {
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
       {
         path:"home",
         element: <Home/>,
-      },   
+      },
+      {
+        path:"login",
+        element: <Login/>,
+      }, 
     ]
   }, 
 ])
