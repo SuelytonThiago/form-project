@@ -7,6 +7,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import {Flex} from'@chakra-ui/react';
 import Navbar from './components/Navbar.jsx'
+import { Box } from '@chakra-ui/react';
 
 function App() {
 

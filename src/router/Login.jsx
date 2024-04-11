@@ -10,6 +10,8 @@ import {
     Input,
     Button,
     useToast,
+    Heading,
+    Text,
   } from '@chakra-ui/react'
 import axios from 'axios';
 
@@ -52,7 +54,11 @@ const Login = () => {
   return (
     <div>
         <Flex direction='column' width='full' justify='center' align='center' bg="gray.900" height="100vh">
-        <Box color='white' fontSize='30px' mb='10px'>Entrar</Box>
+            <Heading>
+                <Text  color='white' fontSize='30px' mb='10px'>
+                        Cadastro
+                </Text>
+            </Heading>
         <Flex direction="column" gap=".5rem" bg="gray.700" p="1.5rem" borderRadius='md' overflow='hidden'>
                 <FormControl color='white'>
                     <FormLabel color='white'>Email</FormLabel>
@@ -70,7 +76,7 @@ const Login = () => {
                 </FormControl>
                 
                 <Box textAlign='center'  padding='1rem'>
-                    <Button onClick={() => login()}>
+                    <Button colorScheme='blue' onClick={() => login()}>
                         Entrar
                     </Button>
                 </Box>
@@ -80,6 +86,13 @@ const Login = () => {
                             color: 'blue.300',
                             transition:'.3s'
                             }}>Criar conta
+                        </Box>
+                    </Link>
+                    <Link to="/register">
+                        <Box cursor='pointer' _hover={{ 
+                            color: 'blue.300',
+                            transition:'.3s'
+                            }}>Esqueceu sua senha?
                         </Box>
                     </Link>
                 </Flex>
