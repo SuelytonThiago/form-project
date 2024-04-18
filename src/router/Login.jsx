@@ -56,7 +56,7 @@ const Login = () => {
         <Flex direction='column' width='full' justify='center' align='center' bg="gray.900" height="100vh">
             <Heading>
                 <Text  color='white' fontSize='30px' mb='10px'>
-                        Cadastro
+                        Login
                 </Text>
             </Heading>
         <Flex direction="column" gap=".5rem" bg="gray.700" p="1.5rem" borderRadius='md' overflow='hidden'>
