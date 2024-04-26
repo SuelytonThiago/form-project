@@ -2,8 +2,8 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
-    faBurger,
-    faUser, faGear,
+    faUser, 
+    faGear,
     faClipboardCheck,
     faCreditCard,
     faLocationCrosshairs,
@@ -23,8 +23,11 @@ import {
 } from '@chakra-ui/react';
 
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const UserMenu = ({username, setName, setAuthenticationValue }) => {
+
+    const navigate = useNavigate();
 
     const logout = () => {
         Cookies.remove('accessToken');
@@ -59,7 +62,10 @@ const UserMenu = ({username, setName, setAuthenticationValue }) => {
                         <Flex
                             gap='1rem'
                             align='center'>
-                            <FontAwesomeIcon width='20px' fontSize='23px' icon={faGear} />Meus dados
+                            <FontAwesomeIcon width='20px' fontSize='23px' icon={faGear} />
+                            <div onClick={() => navigate("/dados-cadastrais")}>
+                                Meus dados
+                            </div>
                         </Flex>
                     </MenuItem >
                     <MenuItem

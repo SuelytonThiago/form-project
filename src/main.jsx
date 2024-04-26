@@ -1,12 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import NextPage from './router/NextPage.jsx'
-import Cadastro from './router/Cadastro.jsx'
-import { ChakraProvider } from '@chakra-ui/react'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import NextPage from './router/NextPage.jsx';
+import Cadastro from './router/Cadastro.jsx';
+import { ChakraProvider } from '@chakra-ui/react';
 import Home from './router/Home.jsx';
-import Login from './router/Login.jsx'
+import Login from './router/Login.jsx';
+import UserData from './router/UserData.jsx';
 
 import {createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path:"login",
         element: <Login/>,
+      },
+      {
+        path:"dados-cadastrais",
+        element: <UserData/>,
       }, 
     ]
   }, 
