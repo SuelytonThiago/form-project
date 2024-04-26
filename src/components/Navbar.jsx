@@ -1,43 +1,86 @@
-import React from 'react'
-import {Flex, Box, Button} from '@chakra-ui/react';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Flex, Box, Button } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import UserMenu from './UserMenu';
+import { faBurger } from '@fortawesome/free-solid-svg-icons';
+
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
-  return (
-    <Flex justify='space-between' p='1rem' bg="#6b3420">  
-        <Box fontSize='25px' textAlign='center'ml='10px'>
-            <Link to="/home">
-                <FontAwesomeIcon color='white' icon={faHome}/>
-            </Link>
-        </Box>
-        <Flex gap='1.5rem'>
-            <Link to="/login">
-                <Button opacity='.7' colorScheme='black' variant='ghost' _hover= { {
-                    opacity: 1,
-                } } color='white'>
-                    Entrar
-                </Button>
-            </Link>
-            <Link to="/register">
-                <Button opacity='.7' colorScheme='black' variant='ghost' _hover= { {
-                    opacity: 1,
-                } } color='white'>
-                    Criar conta
-                </Button>
-            </Link>
-            
-            <Link to="/contacts">
-                <Button opacity='.7' colorScheme='black' variant='ghost' _hover= { {
-                    opacity: 1,
-                } } color='white'>
-                    Contatos
-                </Button>
-            </Link>
+
+    const url = "http://localhost:8080/api/users"
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userName, setUserName] = useState('');
+
+    const handleGetName = async () => {
+        const token = Cookies.get('accessToken');
+        console.log('navbar-' + token);
+        if (token) {
+            try {
+                console.log('Fazendo requisição GET...');
+                const response = await axios.get(url, {
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `Bearer ${token}`
+                    }
+                });
+                console.log('Fez a requisição GET...');
+                console.log('resposta:' + response.data);
+                const { name } = response.data;
+                setIsAuthenticated(true);
+                setUserName(name);
+            } catch (error) {
+                console.error('Erro ao obter o nome do usuário:', error);
+            }
+        }
+    }
+
+    useEffect(() => {
+        handleGetName();
+    }, []);
+
+    return (
+        <Flex justify='space-between' p='1rem' bg="#6b3420" >
+            <Box textAlign='center' ml='10px'>
+                <Link to="/home">
+                    <FontAwesomeIcon fontSize='30px' color='white' icon={faBurger} />
+                </Link>
+            </Box>
+            {!isAuthenticated ? (
+                <Flex gap='1.5rem'>
+                    <Link to="/login">
+                        <Button opacity='.7' colorScheme='black' variant='ghost' _hover={{
+                            opacity: 1,
+                        }} color='white'>
+                            Entrar
+                        </Button>
+                    </Link>
+                    <Link to="/register">
+                        <Button opacity='.7' colorScheme='black' variant='ghost' _hover={{
+                            opacity: 1,
+                        }} color='white'>
+                            Criar conta
+                        </Button>
+                    </Link>
+
+                    <Link to="/contacts">
+                        <Button opacity='.7' colorScheme='black' variant='ghost' _hover={{
+                            opacity: 1,
+                        }} color='white'>
+                            Contatos
+                        </Button>
+                    </Link>
+                </Flex>
+            ) : (
+                <UserMenu
+                username={userName} 
+                setName={setUserName} 
+                setAuthenticationValue={setIsAuthenticated} />
+            )}
         </Flex>
-    </Flex>
-  )
+    )
 }
 
 export default Navbar
