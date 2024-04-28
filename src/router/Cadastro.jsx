@@ -24,6 +24,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import InputMask from "react-input-mask";
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -88,17 +89,48 @@ const Cadastro = () => {
 
     // Validação do campo CPF
     if (steps[currentStep].fields.includes('cpf')) {
-      const cpfRegex = /^\d{11}$/;
-      if (!cpfRegex.test(formData['cpf'])) {
+      let cpf = formData['cpf'].replace(/[^\d]/g, '');
+
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
         formIsValid = false;
-        newErrors['cpf'] = 'Digite um CPF válido';
+        newErrors['cpf'] = 'Insira um cpf válido';
+        return;
+      }
+
+      // Calcula o primeiro dígito verificador
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        sum += parseInt(cpf.charAt(i)) * (10 - i);
+      }
+
+      let digit = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+
+      if (parseInt(cpf.charAt(9)) !== digit) {
+        formIsValid = false;
+        newErrors['cpf'] = 'Insira um cpf válido';
+        return;
+      }
+
+      // Calcula o segundo dígito verificador
+      sum = 0;
+      for (let i = 0; i < 10; i++) {
+        sum += parseInt(cpf.charAt(i)) * (11 - i);
+      }
+
+      digit = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+
+      if (parseInt(cpf.charAt(10)) !== digit) {
+        formIsValid = false;
+        newErrors['cpf'] = 'Insira um cpf válido';
+        return;
       }
     }
 
     // Validação do campo número de contato
     if (steps[currentStep].fields.includes('contactNumber')) {
+      let contactNumber = formData['contactNumber'].replace(/[^\d]/g, '');
       const phoneRegex = /^\d{11}$/
-      if (!phoneRegex.test(formData['contactNumber'])) {
+      if (!phoneRegex.test(contactNumber)) {
         formIsValid = false;
         newErrors['contactNumber'] = 'Digite um número de contato válido';
       }
@@ -136,9 +168,6 @@ const Cadastro = () => {
       password: formData['senha'],
     };
 
-    console.log(user.name);
-    console.log(user.email);
-    
     if (validateForm()) {
       try {
         await axios.post(url, user);
@@ -174,9 +203,15 @@ const Cadastro = () => {
   return (
     <>
       <Flex backgroundImage="url('public/foood.webp')" bgSize="cover" height="calc(100vh - 72px)" justify='center'>
-        <Flex width='350px' direction='column' justify='space-between' m='50px' bg='#6b3420' p='20px' borderRadius='md' >
+        <Flex
+          maxH='400px'
+          direction='column'
+          justify='space-between'
+          m='50px' p='20px'
+          borderRadius='md'
+          bg='#6b3420'>
           <Flex direction='column' gap='1.5rem'>
-            <Stepper size='lg' colorScheme='red' index={currentStep}>
+            <Stepper size={{ base: 'md', md: 'lg' }} colorScheme='red' index={currentStep}>
               {steps.map((step, index) => (
                 <Step key={index}>
                   <StepIndicator>
@@ -191,16 +226,18 @@ const Cadastro = () => {
               ))}
             </Stepper>
 
-            <Text fontWeight="bold" fontSize="20px" textTransform='uppercase' textAlign='center' color='white'>{steps[currentStep].label}</Text>
+            <Text fontWeight="bold" fontSize={{ base: '14px', md: "18px" }} textTransform='uppercase' textAlign='center' color='white'>{steps[currentStep].label}</Text>
 
             <Flex direction='column' gap='1rem'>
               {steps[currentStep].fields.map((fieldName) => (
                 <FormControl key={fieldName} isRequired isInvalid={!!errors[fieldName]}>
-                  <FormLabel color='white'>{fieldName
-                    .replace(/([A-Z])/g, ' $1')
-                    .replace(/^./, (str) => str.toUpperCase())}
+                  <FormLabel
+                    fontSize={{ base: '10px',sm:'13px', md: "15px" }}
+                    color='white'>{fieldName
+                      .replace(/([A-Z])/g, ' $1')
+                      .replace(/^./, (str) => str.toUpperCase())}
                   </FormLabel>
-                  {fieldName === 'senha' || fieldName === 'confirmarSenha'? (
+                  {fieldName === 'senha' || fieldName === 'confirmarSenha' ? (
                     <InputGroup>
                       <Input
                         color='white'
@@ -217,14 +254,32 @@ const Cadastro = () => {
                       </InputRightElement>
                     </InputGroup>
                   ) : (
-                    <Input
-                      color='white'
-                      type={fieldName === 'email' ? 'email' : fieldName === 'senha' || fieldName === 'confirmarSenha' ? 'password' : 'text'}
-                      name={fieldName}
-                      value={formData[fieldName] || ''}
-                      onChange={handleInputChange}
-                      focusBorderColor='white'
-                    />
+                    fieldName === 'cpf' || fieldName === 'contactNumber' ? (
+                      <InputMask
+                        mask={fieldName === 'cpf' ? '999.999.999-99' : '(99)99999-9999'}
+                        maskChar={null}
+                        value={formData[fieldName] || ''}
+                        onChange={handleInputChange}>
+                        {(inputProps) => (
+                          <Input
+                            {...inputProps}
+                            color='white'
+                            type='text'
+                            name={fieldName}
+                            focusBorderColor='white'
+                          />
+                        )}
+                      </InputMask>
+                    ) : (
+                      <Input
+                        color='white'
+                        type={fieldName === 'email' ? 'email' : fieldName === 'senha' || fieldName === 'confirmarSenha' ? 'password' : 'text'}
+                        name={fieldName}
+                        value={formData[fieldName] || ''}
+                        onChange={handleInputChange}
+                        focusBorderColor='white'
+                      />
+                    )
                   )}
                   {errors[fieldName] && (
                     <Text color='red.500' fontSize='sm'>{errors[fieldName]}</Text>

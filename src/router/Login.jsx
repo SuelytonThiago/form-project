@@ -40,7 +40,7 @@ const Login = () => {
 
             Cookies.set('accessToken', access_token);
             Cookies.set('refreshToken', refresh_token);
-            
+
             toast({
                 title: 'Login realizado com sucesso',
                 status: 'success',
@@ -69,19 +69,26 @@ const Login = () => {
     return (
         <div>
             <Flex direction='column' width='full' justify='center' align='center' bg="white" height="calc(100vh - 72px)" backgroundImage="url('public/foood.webp')" bgSize="cover">
-                <Flex direction="column" gap=".5rem" bg="#6b3420" p="1.5rem" borderRadius='md' overflow='hidden' width='350px'>
+                <Flex direction="column" gap=".5rem" bg="#6b3420" p="1.5rem" borderRadius='md' overflow='hidden'>
                     <FormControl >
-                        <FormLabel color='white'>Email</FormLabel>
+                        <FormLabel color='white'
+                            fontSize={{ base: '10px', sm: '13px', md: "15px" }}>
+                            Email
+                        </FormLabel>
                         <Input
                             color='white'
                             type='text'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            focusBorderColor='white' 
-                            />
+                            focusBorderColor='white'
+                        />
                     </FormControl>
                     <FormControl>
-                        <FormLabel color='white'>Senha</FormLabel>
+                        <FormLabel
+                            color='white'
+                            fontSize={{ base: '10px', sm: '13px', md: "15px" }}>
+                            Senha
+                        </FormLabel>
                         <InputGroup>
                             <Input
                                 color='white'
@@ -89,7 +96,7 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 focusBorderColor='white'
-                                />
+                            />
                             <InputRightElement width='4.5rem'>
                                 <Button h='1.75rem' size='sm' onClick={handleClick}>
                                     {show ? <FaEyeSlash /> : <FaEye />}
